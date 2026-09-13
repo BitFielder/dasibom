@@ -57,6 +57,20 @@ npx vercel
 
 ### GitHub 연결로 자동 배포
 
+기존 운영 프로젝트는 `hyeonsu-sims-projects/dasibom`이고 사이트 주소는
+[dasibom-navy.vercel.app](https://dasibom-navy.vercel.app)입니다.
+이 프로젝트의 **Settings → Git**에서 `BitFielder/dasibom`을 연결하고,
+**Production Branch**를 `master`로 설정합니다. 저장소 연결 전
+저장소 소유자 계정에서 [Vercel GitHub 앱](https://github.com/apps/vercel)의
+접근 대상에 `dasibom`을 포함해야 합니다.
+
+연결을 마치면 `master`에 새 커밋이 푸시될 때 운영 배포가 시작됩니다.
+`vercel.json`은 `master` 배포를 활성화하고, 변경 파일에 따른 빌드 생략과
+연속 푸시의 대기 빌드 자동 취소를 사용하지 않도록 설정했습니다.
+빌드 성공 후 운영 URL에 반영되며, 실패하면 기존 정상 배포가 유지됩니다.
+
+새 Vercel 프로젝트를 만드는 경우에는 다음 절차를 따릅니다.
+
 1. 이 폴더의 변경사항을 배포할 GitHub 저장소에 커밋하고 푸시합니다.
 2. [Vercel 새 프로젝트](https://vercel.com/new)에서 해당 저장소를 Import합니다.
 3. Framework Preset은 **Next.js**, Root Directory는 저장소 루트(`./`)를 사용합니다.
