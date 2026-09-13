@@ -4,8 +4,10 @@ Next.js(App Router) + Tailwind CSS로 만든 심리상담센터 홈페이지입�
 
 ## 개발
 
+Node.js 24 LTS를 사용합니다. nvm을 사용한다면 먼저 `nvm install && nvm use`를 실행합니다.
+
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -33,5 +35,46 @@ http://localhost:3000 에서 확인합니다.
 
 ## 배포
 
-Vercel 무료 티어에 그대로 배포 가능합니다. 저장소를 Vercel에 연결하고, 위 텔레그램
-환경변수 2개만 등록하면 됩니다.
+Vercel에서 Next.js 앱으로 배포합니다. `vercel.json`에 설치·빌드 명령을,
+`package.json`과 `.nvmrc`에 Node.js 24 버전을 지정했습니다.
+`/api/apply`는 서버에서 실행되므로 정적 HTML 내보내기(`output: "export"`)는 사용하지 않습니다.
+
+### 로컬 변경사항을 바로 배포
+
+프로젝트 루트(`package.json`이 있는 `dasibom` 폴더)에서 실행합니다.
+
+```bash
+npm ci
+npm run lint
+npm run build
+npx vercel login
+npx vercel
+```
+
+처음 실행할 때 본인의 Vercel 계정/팀을 선택하고 `dasibom` 프로젝트를 생성하거나
+기존에 사용할 프로젝트를 선택합니다. `npx vercel`은 미리보기 배포를 만듭니다.
+미리보기 확인 후 운영 배포는 `npx vercel --prod`로 진행합니다.
+
+### GitHub 연결로 자동 배포
+
+1. 이 폴더의 변경사항을 배포할 GitHub 저장소에 커밋하고 푸시합니다.
+2. [Vercel 새 프로젝트](https://vercel.com/new)에서 해당 저장소를 Import합니다.
+3. Framework Preset은 **Next.js**, Root Directory는 저장소 루트(`./`)를 사용합니다.
+   상위 폴더 전체를 별도 저장소로 올렸다면 `package.json`이 있는 폴더를 지정합니다.
+4. Install Command는 `npm ci`, Build Command는 `npm run build`, Node.js는 **24.x**입니다.
+   Output Directory는 Next.js 기본 설정을 사용합니다.
+5. Environment Variables에 `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`를 추가하고 Deploy합니다.
+
+홈페이지는 텔레그램 환경변수 없이도 빌드·표시되지만, **신청 접수는 두 값이 모두 있어야 동작합니다.**
+두 값은 서버 전용 비밀 값이므로 `NEXT_PUBLIC_` 접두사를 붙이거나 Git에 커밋하지 않습니다.
+Vercel에서 **Preview**와 **Production** 중 사용할 환경마다 등록하세요.
+환경변수를 추가하거나 변경했다면 새 배포 또는 Redeploy가 필요합니다.
+
+배포 후 `/`, `/about`, `/counseling`, `/test`, `/corporate`, `/reviews`, `/inquiry`를 확인합니다.
+신청을 제출하면 실제 텔레그램 메시지가 전송되므로, 본인의 테스트 정보로 수신 여부를 확인하세요.
+
+현재 주소·전화번호는 예시 값이고 지도는 준비 중입니다. 실제 운영 정보로 교체할 위치는
+`src/components/Footer.tsx`, `src/app/inquiry/page.tsx`, `src/app/about/page.tsx`입니다.
+
+공식 문서: [Next.js 배포](https://vercel.com/docs/frameworks/full-stack/nextjs),
+[Node.js 버전 설정](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions).
