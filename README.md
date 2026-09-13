@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 다시봄 상담센터
 
-## Getting Started
+Next.js(App Router) + Tailwind CSS로 만든 심리상담센터 홈페이지입니다.
 
-First, run the development server:
+## 개발
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+http://localhost:3000 에서 확인합니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 텔레그램 알림 설정 (무료 청년 응원 패키지 신청)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`/inquiry` 페이지의 신청 폼은 `/api/apply`로 제출되고, 텔레그램 봇을 통해 지정한
+채팅방으로 신청 내용이 전송됩니다.
 
-## Learn More
+1. 텔레그램에서 **@BotFather**에게 `/newbot`으로 봇을 만들고 **Bot Token**을 발급받습니다.
+2. 알림을 받을 채팅방(개인 또는 그룹)에서 봇과 대화를 시작한 뒤, 아래 URL로 **Chat ID**를 확인합니다.
+   ```
+   https://api.telegram.org/bot<BOT_TOKEN>/getUpdates
+   ```
+3. 프로젝트 루트에 `.env.local` 파일을 만들고 다음을 채웁니다. (`.env.example` 참고)
+   ```
+   TELEGRAM_BOT_TOKEN=발급받은 토큰
+   TELEGRAM_CHAT_ID=확인한 채팅 ID
+   ```
+4. 배포 시(Vercel 등) 동일한 값을 호스팅 환경변수로 등록합니다.
 
-To learn more about Next.js, take a look at the following resources:
+> 신청 데이터는 파일이나 DB에 저장되지 않고, 접수 즉시 텔레그램 메시지로만 전달됩니다.
+> (서버리스 무료 호스팅에서는 로컬 파일 저장이 유지되지 않기 때문입니다.)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 배포
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Vercel 무료 티어에 그대로 배포 가능합니다. 저장소를 Vercel에 연결하고, 위 텔레그램
+환경변수 2개만 등록하면 됩니다.
